@@ -3,9 +3,9 @@ import UsersController from "./controllers/ UsersController";
 
 const routes = express.Router();
 
-routes.get("/create", UsersController.create);
+routes.post("/create", UsersController.create);
 routes.get("/read", UsersController.read);
-routes.get("/update", UsersController.update);
-routes.get("/delete", UsersController.delete);
+routes.post("/update", UsersController.update);
+routes.delete("/delete", UsersController.delete);
 
 export default routes;
