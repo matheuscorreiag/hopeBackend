@@ -13,16 +13,27 @@ class UsersController {
       const prisma = new PrismaClient();
       const body: BodyRequest = req.body;
 
-      await prisma.users
-        .create({
-          data: {
-            email: body.email,
-            password: await bcrypt.hash(body.password, 10),
-          },
-        })
-        .then(() => {
-          return res.json({ message: "created" });
+      if (
+        body.email !== "" &&
+        body.password !== "" &&
+        (await prisma.users.findMany({ where: { email: body.email } }))
+          .length === 0
+      ) {
+        await prisma.users
+          .create({
+            data: {
+              email: body.email,
+              password: await bcrypt.hash(body.password, 10),
+            },
+          })
+          .then(() => {
+            return res.json({ message: "created" });
+          });
+      } else {
+        return res.json({
+          message: "email or password missing arguments or already exists",
         });
+      }
     } catch (e) {
       return res.json({ message: "fail to create user", error: e });
     }
