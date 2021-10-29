@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
@@ -12,9 +13,16 @@ class UsersController {
       const prisma = new PrismaClient();
       const body: BodyRequest = req.body;
 
-      await prisma.users.create({ data: body }).then(() => {
-        return res.json({ message: "created" });
-      });
+      await prisma.users
+        .create({
+          data: {
+            email: body.email,
+            password: await bcrypt.hash(body.password, 10),
+          },
+        })
+        .then(() => {
+          return res.json({ message: "created" });
+        });
     } catch (e) {
       return res.json({ message: "fail to create user", error: e });
     }
@@ -50,10 +58,10 @@ class UsersController {
   async delete(req: Request, res: Response) {
     try {
       const prisma = new PrismaClient();
-      const id = req.query.id;
+      const id = req.params.id;
 
-      await prisma.users.delete({ where: id }).then((user) => {
-        return res.json({ message: "deleted", user });
+      await prisma.users.delete({ where: { id: Number(id) } }).then(() => {
+        return res.json({ message: "deleted" });
       });
     } catch (e) {
       return res.json({ message: "fail to delete user", error: e });
