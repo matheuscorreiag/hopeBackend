@@ -57,7 +57,10 @@ class UsersController {
       await prisma.users
         .update({
           where: { id: body.id },
-          data: { email: body.email, password: body.password },
+          data: {
+            email: body.email,
+            password: await bcrypt.hash(body.password, 10),
+          },
         })
         .then((user) => {
           return res.json({ message: "updated", user });
