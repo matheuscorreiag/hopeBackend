@@ -1,14 +1,31 @@
-import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Form, Button, Card } from "react-bootstrap";
 import api from "../../services/api";
+import { FaRegTimesCircle } from "react-icons/fa";
 import "./styles.css";
 import "../../index.css";
 
+interface UserForm {
+  id?: number;
+  email: string;
+  password: string;
+}
+
 function App() {
-  const handleSubmit = () => {
-    api.post("/", form);
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    await api.post("/users/create", form).then((res) => {
+      console.log(res);
+    });
   };
   const [form, setForm] = useState({ email: "", password: "" });
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    api.get("/users/read").then((res) => {
+      setUsers(res.data);
+    });
+  }, [users]);
   return (
     <div className="App">
       <div className="formContainer">
@@ -31,11 +48,28 @@ function App() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
               />
             </Form.Group>
-            <Button variant="primary" type="submit" onClick={handleSubmit}>
+            <Button
+              variant="primary"
+              type="submit"
+              onClick={(e) => handleSubmit(e)}
+            >
               Save
             </Button>
           </Form>
         </div>
+      </div>
+      <div className="usersListContainer">
+        <h2>Users on the database</h2>
+        {users.map((user: UserForm) => (
+          <Card>
+            <Card.Body className="cardBody">
+              <div>
+                {user.id} | {user.email}
+              </div>
+              <p> | X </p>
+            </Card.Body>
+          </Card>
+        ))}
       </div>
     </div>
   );

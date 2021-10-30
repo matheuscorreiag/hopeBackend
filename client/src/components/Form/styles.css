@@ -13,3 +13,16 @@
   align-items: center;
   justify-content: center;
 }
+.usersListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.card {
+  width: 350px !important;
+}
+.cardBody {
+  display: flex !important;
+  flex-direction: row !important;
+}
