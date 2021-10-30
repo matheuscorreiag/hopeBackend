@@ -1,0 +1,29 @@
+.formContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+}
+.form {
+  width: 350px;
+  height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardsListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.card {
+  width: 350px;
+  margin-bottom: 5px;
+}
+.card-body {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+}

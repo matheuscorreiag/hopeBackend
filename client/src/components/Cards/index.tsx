@@ -4,49 +4,40 @@ import api from "../../services/api";
 import "./styles.css";
 import "../../index.css";
 
-interface UserForm {
+interface cardForm {
   id?: number;
-  email: string;
-  password: string;
+  message: string;
 }
 
 function App() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    await api.post("/users/create", form).then((res) => {
+    await api.post("/cards/create", form).then((res) => {
       console.log(res);
     });
   };
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [users, setUsers] = useState([]);
+  const [form, setForm] = useState({ message: "", password: "" });
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    api.get("/users/read").then((res) => {
-      setUsers(res.data);
+    api.get("/cards/read").then((res) => {
+      setCards(res.data);
     });
-  }, [users]);
+  }, [cards]);
   return (
     <div className="App">
       <div className="formContainer">
         <div className="form">
           <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+            <Form.Group className="mb-3" controlId="formBasicMessage">
+              <Form.Label>Type your message</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email"
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                type="message"
+                placeholder="Enter message"
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-            </Form.Group>
             <Button
               variant="primary"
               type="submit"
@@ -57,18 +48,18 @@ function App() {
           </Form>
         </div>
       </div>
-      <div className="usersListContainer">
-        <h2>Users on the database</h2>
-        {users.map((user: UserForm) => (
+      <div className="cardsListContainer">
+        <h2>Cards on the database</h2>
+        {cards.map((card: cardForm) => (
           <Card>
             <Card.Body>
               <div>
-                {user.id} | {user.email}
+                {card.id} | {card.message}
               </div>
               <Button
                 variant="danger"
                 onClick={() =>
-                  api.delete(`/users/delete/${user.id}`).then((res) => {
+                  api.delete(`/cards/delete/${card.id}`).then((res) => {
                     console.log(res);
                   })
                 }
