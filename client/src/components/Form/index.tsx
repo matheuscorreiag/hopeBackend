@@ -62,11 +62,20 @@ function App() {
         <h2>Users on the database</h2>
         {users.map((user: UserForm) => (
           <Card>
-            <Card.Body className="cardBody">
+            <Card.Body>
               <div>
                 {user.id} | {user.email}
               </div>
-              <p> | X </p>
+              <Button
+                variant="danger"
+                onClick={() =>
+                  api.delete(`/users/delete/${user.id}`).then((res) => {
+                    console.log(res);
+                  })
+                }
+              >
+                X
+              </Button>
             </Card.Body>
           </Card>
         ))}
