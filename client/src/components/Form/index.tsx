@@ -58,7 +58,8 @@ function App() {
         </div>
       </div>
       <div className="usersListContainer">
-        <h2>Users on the database</h2>
+        {users.length > 0 && <h2>Users on the database</h2>}
+
         {users.map((user: UserForm) => (
           <Card>
             <Card.Body>

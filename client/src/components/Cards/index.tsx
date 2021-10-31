@@ -49,7 +49,7 @@ function App() {
         </div>
       </div>
       <div className="cardsListContainer">
-        <h2>Cards on the database</h2>
+        {cards.length > 0 && <h2>Cards on the database</h2>}
         {cards.map((card: cardForm) => (
           <Card>
             <Card.Body>
