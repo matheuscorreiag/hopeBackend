@@ -21,11 +21,9 @@ function Cards() {
     e.preventDefault();
 
     console.log(form);
-    await api
-      .post("/cards/update", { id: Number(form.id), message: form.message })
-      .then((res) => {
-        console.log(res);
-      });
+    await api.post("/cards/update", form).then((res) => {
+      console.log(res);
+    });
   };
   const [form, setForm] = useState<cardForm>({
     message: "",
@@ -45,6 +43,7 @@ function Cards() {
             <Form.Group className="mb-3" controlId="formBasicMessage">
               <Form.Label>Type your new message</Form.Label>
               <Form.Control
+                autoComplete="off"
                 type="message"
                 placeholder="Enter message"
                 onChange={(e: any) =>
@@ -70,9 +69,10 @@ function Cards() {
                 <InputGroup.Text id="inputGroup-sizing-sm">Id</InputGroup.Text>
                 <Form.Control
                   onChange={(e: any) =>
-                    setForm({ ...form, id: e.target.value })
+                    setForm({ ...form, id: Number(e.target.value) })
                   }
                   aria-label="Small"
+                  autoComplete="off"
                   aria-describedby="inputGroup-sizing-sm"
                 />
               </InputGroup>
@@ -81,6 +81,7 @@ function Cards() {
                 type="message"
                 placeholder="Enter message"
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
+                autoComplete="off"
               />
             </Form.Group>
 
