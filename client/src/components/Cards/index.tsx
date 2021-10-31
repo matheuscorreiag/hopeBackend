@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, InputGroup } from "react-bootstrap";
 import api from "../../services/api";
 import "./styles.css";
 import "../../index.css";
@@ -9,14 +9,27 @@ interface cardForm {
   message: string;
 }
 
-function App() {
+function Cards() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
     await api.post("/cards/create", form).then((res) => {
       console.log(res);
     });
   };
-  const [form, setForm] = useState({ message: "", password: "" });
+  const handleUpdate = async (e: any) => {
+    e.preventDefault();
+
+    console.log(form);
+    await api
+      .post("/cards/update", { id: Number(form.id), message: form.message })
+      .then((res) => {
+        console.log(res);
+      });
+  };
+  const [form, setForm] = useState<cardForm>({
+    message: "",
+  });
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
@@ -30,11 +43,13 @@ function App() {
         <div className="form">
           <Form>
             <Form.Group className="mb-3" controlId="formBasicMessage">
-              <Form.Label>Type your message</Form.Label>
+              <Form.Label>Type your new message</Form.Label>
               <Form.Control
                 type="message"
                 placeholder="Enter message"
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                onChange={(e: any) =>
+                  setForm({ ...form, message: e.target.value })
+                }
               />
             </Form.Group>
 
@@ -47,11 +62,42 @@ function App() {
             </Button>
           </Form>
         </div>
+        <div className="form">
+          <Form>
+            <Form.Group className="mb-3" controlId="formBasicMessage">
+              <Form.Label>Update your message</Form.Label>
+              <InputGroup size="sm" className="mb-3">
+                <InputGroup.Text id="inputGroup-sizing-sm">Id</InputGroup.Text>
+                <Form.Control
+                  onChange={(e: any) =>
+                    setForm({ ...form, id: e.target.value })
+                  }
+                  aria-label="Small"
+                  aria-describedby="inputGroup-sizing-sm"
+                />
+              </InputGroup>
+
+              <Form.Control
+                type="message"
+                placeholder="Enter message"
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+              />
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              type="submit"
+              onClick={(e) => handleUpdate(e)}
+            >
+              Update
+            </Button>
+          </Form>
+        </div>
       </div>
       <div className="cardsListContainer">
         {cards.length > 0 && <h2>Cards on the database</h2>}
         {cards.map((card: cardForm) => (
-          <Card>
+          <Card key={card.id}>
             <Card.Body>
               <div>
                 {card.id} | {card.message}
@@ -74,4 +120,4 @@ function App() {
   );
 }
 
-export default App;
+export default Cards;
